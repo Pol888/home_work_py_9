@@ -1,16 +1,31 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+from telegram import Update, InlineQueryResultArticle, InputTextMessageContent
+from telegram.ext import filters, MessageHandler, ApplicationBuilder, CommandHandler, ContextTypes, InlineQueryHandler
+import t  # токен
+import record_log
+import bot_function
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    record_log.l()
+    application = ApplicationBuilder().token(t.tk).build()
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    start_handler = CommandHandler('start', bot_function.start)
+    echo_handler = MessageHandler(filters.TEXT & (~filters.COMMAND), bot_function.echo)
+    caps_handler = CommandHandler('caps', bot_function.caps)
+    inline_caps_handler = InlineQueryHandler(bot_function.inline_caps)
+
+    application.add_handler(start_handler)
+    application.add_handler(echo_handler)
+    application.add_handler(caps_handler)
+    application.add_handler(inline_caps_handler)
+
+    # ==========================================================================
+    Agata_handler = CommandHandler('hello', bot_function.Agata)
+    Agata_multiplication = CommandHandler('go', bot_function.multiplication)
+    Agata_interpreter = CommandHandler('a', bot_function.interpreter)
+
+    application.add_handler(Agata_handler)
+    application.add_handler(Agata_multiplication)
+    application.add_handler(Agata_interpreter)
+
+    application.run_polling()
